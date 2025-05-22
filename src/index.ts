@@ -25,6 +25,10 @@ const main = async () => {
   for (const query of queries) {
     console.log(`Searching the web for: ${query}`);
     const searchResults = await searchAndProcess(query);
+    for (const searchResult of searchResults) {
+      console.log(`Processing search result: ${searchResult.url}`);
+      const learnings = await generateLearnings(query, searchResult);
+    }
   }
 };
 
