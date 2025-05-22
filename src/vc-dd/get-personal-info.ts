@@ -67,3 +67,43 @@ const getFounderBackground = async (founder: string) => {
 
   return { text, results };
 };
+
+const getFounderWebsiteAndPosts = async (founder: string) => {
+  const result = await exa.searchAndContents(`${founder} website`, {
+    type: "keyword",
+    text: true,
+    numResults: 4,
+    livecrawl: "always",
+  });
+
+  const {
+    object: { url },
+  } = await generateObject({
+    model: openai("gpt-4o"),
+    prompt: `From the following search results, extract the website URL of the following person <person_name>${founder}</person_name>.\n\n<search_results>${JSON.stringify(result.results)}</search_results>`,
+    schema: z.object({
+      url: z
+        .string()
+        .nullable()
+        .describe(
+          `The personal website for ${founder}. If no website is found, return null. This should be only the domain name e.g. www.example.com`,
+        ),
+    }),
+  });
+
+  if (url) {
+    const result = await exa.searchAndContents(url, {
+      category: "personal site",
+      type: "neural",
+      text: true,
+      numResults: 1,
+      livecrawl: "always",
+      subpages: 2,
+      subpageTarget: ["blog", "posts", "writing"],
+      includeDomains: [url],
+    });
+    return result.results[0];
+  } else {
+    return [];
+  }
+};
