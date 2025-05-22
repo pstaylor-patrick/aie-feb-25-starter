@@ -111,3 +111,5 @@ const main = async (prompt: string) => {
     }
   }
 };
+
+main("Please write an investment pitch for investing in the Humane AI pin.");
