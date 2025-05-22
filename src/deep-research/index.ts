@@ -210,7 +210,7 @@ const SYSTEM_PROMPT = `You are an expert researcher. Today is ${new Date().toISO
   - You may use high levels of speculation or prediction, just flag it for me.
   - Use Markdown formatting.`;
 
-const generateReport = async (research: Research) => {
+export const generateReport = async (research: Research) => {
   const { text } = await generateText({
     model: openai("o3-mini"),
     system: SYSTEM_PROMPT,

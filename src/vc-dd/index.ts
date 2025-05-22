@@ -3,8 +3,9 @@ import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
 import { getCompanyInfo } from "./company-info";
 import { getCompetitors } from "./get-competitors";
-import { getFounderInfo } from "./get-personal-info";
-import { assessFounderMarketFit } from "./get-personal-info";
+import { getFounderInfo, assessFounderMarketFit } from "./get-personal-info";
+import { getCompanyFinancials } from "./get-financials";
+import { generateReport } from "../deep-research/index";
 
 const main = async (prompt: string) => {
   const { fullStream } = streamText({
@@ -48,6 +49,48 @@ const main = async (prompt: string) => {
         }),
         execute: async ({ founderName, companyInfo }) => {
           return await assessFounderMarketFit({ founderName, companyInfo });
+        },
+      }),
+      getFinancialInformation: tool({
+        description: "Get financial information about a company",
+        parameters: z.object({
+          companyName: z.string(),
+        }),
+        execute: async ({ companyName }) => {
+          return await getCompanyFinancials(companyName);
+        },
+      }),
+      generateInvestmentPitch: tool({
+        description: "Generate an investment pitch for a company",
+        parameters: z.object({
+          companyName: z.string(),
+          companyInfo: z.string(),
+          competitors: z.array(z.string()),
+          founderInfo: z.string(),
+          financialInfo: z.string(),
+        }),
+        execute: async ({
+          companyName,
+          companyInfo,
+          competitors,
+          founderInfo,
+          financialInfo,
+        }) => {
+          return await generateReport({
+            query: companyName,
+            queries: [],
+            searchResults: [],
+            learnings: [],
+            completedQueries: [],
+            ...JSON.parse(
+              JSON.stringify({
+                companyInfo,
+                competitors,
+                founderInfo,
+                financialInfo,
+              }),
+            ),
+          });
         },
       }),
     },
