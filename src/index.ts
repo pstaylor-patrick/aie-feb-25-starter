@@ -1,13 +1,26 @@
-import { google } from '@ai-sdk/google'
-import { generateText } from 'ai'
-import 'dotenv/config'
+import { openai } from "@ai-sdk/openai";
+import { generateText, tool } from "ai";
+import "dotenv/config";
+import { z } from "zod";
  
 const main = async () => {
   const result = await generateText({
-    model: google('gemini-2.0-flash-001', { useSearchGrounding: true }),
-    prompt: 'When is the AI Engineer summit?',
-  })
-  console.log(result.text, result.sources)
-}
+    model: openai("gpt-4o"),
+    prompt: "What's 10 + 5?",
+    tools: {
+      addNumbers: tool({
+        description: "Add two numbers together",
+        parameters: z.object({
+          num1: z.number(),
+          num2: z.number(),
+        }),
+        execute: async ({ num1, num2 }) => {
+          return num1 + num2;
+        },
+      }),
+    },
+  });
+  console.log(result.toolResults);
+};
  
-main()
+main();
