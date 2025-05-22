@@ -1,5 +1,10 @@
-const main = async (prompt: string) => {
-  console.log("response.");
-};
+import { streamText } from "ai";
+import { openai } from "@ai-sdk/openai";
 
-main("prompt?");
+const main = async (prompt: string) => {
+  const { fullStream } = streamText({
+    model: openai("gpt-4o"),
+    prompt,
+    maxSteps: 10,
+  });
+};
