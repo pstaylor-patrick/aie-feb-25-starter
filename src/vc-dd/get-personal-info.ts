@@ -107,3 +107,27 @@ const getFounderWebsiteAndPosts = async (founder: string) => {
     return [];
   }
 };
+
+export const assessFounderMarketFit = async ({
+  founderName,
+  companyInfo,
+}: {
+  founderName: string;
+  companyInfo: string;
+}) => {
+  const { text } = await generateText({
+    model: openai("o3-mini"),
+    system: "You are a partner at a VC fund looking to invest in a startup...",
+    prompt: `<founder_name>${founderName}</founder_name>\n\n<search_results>${JSON.stringify({ companyInfo })}</search_results>`,
+  });
+  return text;
+};
+
+export const getFounderInfo = async (founderName: string) => {
+  const founderInfo = await Promise.all([
+    getFounderTweets(founderName),
+    getFounderBackground(founderName),
+    getFounderWebsiteAndPosts(founderName),
+  ]);
+  return founderInfo;
+};
