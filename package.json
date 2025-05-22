@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx src/index.ts"
+    "dev:deep-research": "tsx src/deep-research/index.ts",
+    "dev:exa-company-info": "tsx src/exa-company-info/index.ts",
+    "dev": "pnpm run dev:exa-company-info"
   },
   "keywords": [],
   "author": "",
