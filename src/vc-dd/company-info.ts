@@ -71,10 +71,3 @@ export const getCompanyInfo = async (company: string) => {
   });
   return object;
 };
-
-const main = async () => {
-  const companyInfo = await getCompanyInfo("Apple");
-  console.log(companyInfo);
-};
-
-main();
