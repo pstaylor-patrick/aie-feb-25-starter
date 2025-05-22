@@ -7,7 +7,7 @@ const main = async () => {
     model: google('gemini-2.0-flash-001', { useSearchGrounding: true }),
     prompt: 'When is the AI Engineer summit?',
   })
-  console.log(result.text)
+  console.log(result.text, result.sources)
 }
  
 main()
