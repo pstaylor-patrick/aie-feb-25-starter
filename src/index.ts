@@ -21,6 +21,7 @@ const generateSearchQueries = async (query: string, n: number = 3) => {
 const main = async () => {
   const prompt = 'What do you need to be a D1 shotput athlete?'
   const queries = await generateSearchQueries(prompt)
+  console.log(queries)
 }
 
 main()
