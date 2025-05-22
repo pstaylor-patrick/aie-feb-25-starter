@@ -1,17 +1,19 @@
-import { openai } from "@ai-sdk/openai";
-import { generateObject } from "ai";
-import "dotenv/config";
-import { z } from "zod";
+import { openai } from '@ai-sdk/openai'
+import { generateObject } from 'ai'
+import { z } from 'zod'
+import 'dotenv/config'
  
-const main = async () => {
-  const result = await generateObject({
-    model: openai("gpt-4o-mini"),
-    prompt: "Please come up with 10 definitions for AI agents.",
+const mainModel = openai('gpt-4o')
+ 
+const generateSearchQueries = async (query: string, n: number = 3) => {
+  const {
+    object: { queries },
+  } = await generateObject({
+    model: mainModel,
+    prompt: `Generate ${n} search queries for the following query: ${query}`,
     schema: z.object({
-      definitions: z.array(z.string().describe("Use as much jargon as possible. It should be completely incoherent.")),
+      queries: z.array(z.string()).min(1).max(5),
     }),
-  });
-  console.log(result.object.definitions);
-};
- 
-main();
+  })
+  return queries
+}
