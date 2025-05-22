@@ -46,3 +46,24 @@ const getFounderTweets = async (founder: string) => {
   );
   return result.results;
 };
+
+const getFounderBackground = async (founder: string) => {
+  const exaSearch = exa.searchAndContents(`${founder} Linkedin profile`, {
+    type: "keyword",
+    numResults: 2,
+    livecrawl: "always",
+    includeDomains: ["linkedin.com"],
+  });
+
+  const perplexitySearch = generateText({
+    model: perplexity("sonar-pro"),
+    prompt: `Please provide a brief summary of the following person's background. <person_name>${founder}</person_name>.`,
+  });
+
+  const [{ text }, { results }] = await Promise.all([
+    perplexitySearch,
+    exaSearch,
+  ]);
+
+  return { text, results };
+};
