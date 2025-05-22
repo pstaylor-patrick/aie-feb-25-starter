@@ -33,3 +33,17 @@ const fetchPitchbook = async (company: string) => {
   });
   return result.results[0];
 };
+
+const fetchFinancials = async (company: string) => {
+  const result = await exa.searchAndContents(`${company} financials:`, {
+    type: "keyword",
+    numResults: 1,
+    text: true,
+    summary: {
+      query: `Tell me about the financials of this company in detail. Do not tell me about the company, just give all the financial information in detail. If financial info is not preset, just reply with one word "NO".`,
+    },
+    livecrawl: "always",
+    includeText: [company],
+  });
+  return result.results[0];
+};
