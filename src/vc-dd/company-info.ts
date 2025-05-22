@@ -2,10 +2,7 @@ import { perplexity } from "@ai-sdk/perplexity";
 import { generateText, Output, tool, generateObject } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
-import "dotenv/config";
-import Exa from "exa-js";
-
-export const exa = new Exa(process.env.EXA_API_KEY);
+import { exa } from "./shared";
 
 const companyInfoPrompt = (
   company: string,

@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev:deep-research": "tsx src/deep-research/index.ts",
-    "dev:company-info": "tsx src/company-info/index.ts",
-    "dev": "pnpm run dev:company-info"
+    "dev:vc-dd:company-info": "tsx src/vc-dd/company-info.ts",
+    "dev": "pnpm run dev:vc-dd:company-info"
   },
   "keywords": [],
   "author": "",
