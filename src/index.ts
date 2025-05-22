@@ -57,7 +57,10 @@ const deepResearch = async (
 
   for (const query of queries) {
     console.log(`Searching the web for: ${query}`);
-    const searchResults = await searchAndProcess(query);
+    const searchResults = await searchAndProcess(
+      query,
+      accumulatedResearch.searchResults,
+    );
     accumulatedResearch.searchResults.push(...searchResults);
     for (const searchResult of searchResults) {
       console.log(`Processing search result: ${searchResult.url}`);
@@ -67,7 +70,7 @@ const deepResearch = async (
 
       const newQuery = `Overall research goal: ${prompt}
           Previous search queries: ${accumulatedResearch.completedQueries.join(", ")}
-  
+   
           Follow-up questions: ${learnings.followUpQuestions.join(", ")}
           `;
       await deepResearch(newQuery, depth - 1, Math.ceil(breadth / 2));
