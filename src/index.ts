@@ -25,3 +25,28 @@ const main = async () => {
 }
 
 main()
+
+import Exa from 'exa-js'
+ 
+const exa = new Exa(process.env.EXA_API_KEY)
+ 
+type SearchResult = {
+  title: string
+  url: string
+  content: string
+}
+ 
+const searchWeb = async (query: string) => {
+  const { results } = await exa.searchAndContents(query, {
+    numResults: 1,
+    livecrawl: 'always',
+  })
+  return results.map(
+    (r) =>
+      ({
+        title: r.title,
+        url: r.url,
+        content: r.text,
+      }) as SearchResult
+  )
+}
