@@ -80,8 +80,14 @@ const deepResearch = async (
 };
 
 const main = async () => {
-  const prompt = "What do you need to be a D1 shotput athlete?";
-  const research = await deepResearch(prompt);
+  const research = await deepResearch(
+    "What do you need to be a D1 shotput athlete?",
+  );
+  console.log("Research completed!");
+  console.log("Generating report...");
+  const report = await generateReport(research);
+  console.log("Report generated! report.md");
+  fs.writeFileSync("report.md", report);
 };
 
 main();
