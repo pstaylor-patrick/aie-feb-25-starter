@@ -7,7 +7,8 @@
     "dev:deep-research": "tsx src/deep-research/index.ts",
     "dev:vc-dd:company-info": "tsx src/vc-dd/company-info.ts",
     "dev:vc-dd:get-competitors": "tsx src/vc-dd/get-competitors.ts",
-    "dev": "pnpm run dev:vc-dd:get-competitors"
+    "dev:vc-dd:get-personal-info": "tsx src/vc-dd/get-personal-info.ts",
+    "dev": "pnpm run dev:vc-dd:get-personal-info"
   },
   "keywords": [],
   "author": "",
