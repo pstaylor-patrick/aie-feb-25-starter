@@ -48,6 +48,10 @@ const deepResearch = async (
     accumulatedResearch.query = prompt;
   }
 
+  if (depth === 0) {
+    return accumulatedResearch;
+  }
+
   const queries = await generateSearchQueries(prompt, breadth);
   accumulatedResearch.queries = queries;
 
@@ -61,9 +65,15 @@ const deepResearch = async (
       accumulatedResearch.learnings.push(learnings);
       accumulatedResearch.completedQueries.push(query);
 
-      // call deepResearch recursively with decrementing depth and breadth
+      const newQuery = `Overall research goal: ${prompt}
+          Previous search queries: ${accumulatedResearch.completedQueries.join(", ")}
+  
+          Follow-up questions: ${learnings.followUpQuestions.join(", ")}
+          `;
+      await deepResearch(newQuery, depth - 1, Math.ceil(breadth / 2));
     }
   }
+  return accumulatedResearch;
 };
 
 const main = async () => {
