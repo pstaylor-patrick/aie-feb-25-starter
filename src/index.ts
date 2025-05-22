@@ -188,3 +188,13 @@ const generateLearnings = async (query: string, searchResult: SearchResult) => {
   });
   return object;
 };
+
+const generateReport = async (research: Research) => {
+  const { text } = await generateText({
+    model: openai("o3-mini"),
+    prompt:
+      "Generate a report based on the following research data:\n\n" +
+      JSON.stringify(research, null, 2),
+  });
+  return text;
+};
