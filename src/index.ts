@@ -2,6 +2,7 @@ import { openai } from "@ai-sdk/openai";
 import { generateObject, generateText, tool } from "ai";
 import { z } from "zod";
 import "dotenv/config";
+import * as fs from "fs";
 
 type Learning = {
   learning: string;
