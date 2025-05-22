@@ -3,6 +3,27 @@ import { generateObject, generateText, tool } from "ai";
 import { z } from "zod";
 import "dotenv/config";
 
+type Learning = {
+  learning: string;
+  followUpQuestions: string[];
+};
+
+type Research = {
+  query: string | undefined;
+  queries: string[];
+  searchResults: SearchResult[];
+  learnings: Learning[];
+  completedQueries: string[];
+};
+
+const accumulatedResearch: Research = {
+  query: undefined,
+  queries: [],
+  searchResults: [],
+  learnings: [],
+  completedQueries: [],
+};
+
 const mainModel = openai("gpt-4o");
 
 const generateSearchQueries = async (query: string, n: number = 3) => {
