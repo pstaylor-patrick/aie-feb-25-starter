@@ -23,3 +23,13 @@ const fetchFunding = async (company: string) => {
   });
   return result.results[0];
 };
+
+const fetchPitchbook = async (company: string) => {
+  const result = await exa.searchAndContents(`${company} pitchbook page:`, {
+    type: "keyword",
+    numResults: 1,
+    includeDomains: ["pitchbook.com"],
+    includeText: [company],
+  });
+  return result.results[0];
+};
