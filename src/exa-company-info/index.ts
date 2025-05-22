@@ -1,5 +1,5 @@
 import { perplexity } from "@ai-sdk/perplexity";
-import { generateText, Output, tool } from "ai";
+import { generateText, Output, tool, generateObject } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
 import "dotenv/config";
@@ -50,6 +50,26 @@ const fetchCompanyInfoFromWeb = async (company: string) => {
           .array(z.string())
           .describe("The products offered by the company"),
       }),
+    }),
+  });
+  return object;
+};
+
+export const getCompanyInfo = async (company: string) => {
+  const results = await Promise.all([
+    await fetchCompanyInfoWithPerplexity(company),
+    await fetchCompanyInfoFromWeb(company),
+  ]);
+  const { object } = await generateObject({
+    model: openai("gpt-4o"),
+    prompt: `The user has asked for a detailed overview of ${company}.
+      Synthesize from the following sources:\n${JSON.stringify(results)}`,
+    schema: z.object({
+      description: z.string(),
+      products: z
+        .array(z.string())
+        .describe("The products offered by the company"),
+      sources: z.array(z.string()).describe("The sources used"),
     }),
   });
   return object;
