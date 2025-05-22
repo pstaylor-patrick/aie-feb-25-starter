@@ -1,6 +1,7 @@
 import { exa } from "./shared";
-import { generateObject } from "ai";
+import { generateObject, generateText } from "ai";
 import { openai } from "@ai-sdk/openai";
+import { perplexity } from "@ai-sdk/perplexity";
 import { z } from "zod";
 
 const getFounderTweets = async (founder: string) => {
