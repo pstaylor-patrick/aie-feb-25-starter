@@ -1,3 +1,5 @@
+import { perplexity } from "@ai-sdk/perplexity";
+import { generateText } from "ai";
 import "dotenv/config";
 import Exa from "exa-js";
 
@@ -10,6 +12,14 @@ const companyInfoPrompt = (
 - what do they sell / what products do they offer
  
 <company>${company}</company>`;
+
+const fetchCompanyInfoWithPerplexity = async (company: string) => {
+  const { text: description, sources } = await generateText({
+    model: perplexity("sonar-pro"),
+    prompt: companyInfoPrompt(company),
+  });
+  return { description, sources };
+};
 
 const main = async () => {
   console.log("hello world");
