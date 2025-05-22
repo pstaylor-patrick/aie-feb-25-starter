@@ -95,4 +95,19 @@ const main = async (prompt: string) => {
       }),
     },
   });
+  for await (const delta of fullStream) {
+    if (delta.type === "tool-call") {
+      console.log(delta);
+    }
+    if (delta.type === "tool-result") {
+      if (delta.toolName === "generateInvestmentPitch") {
+        console.log(delta.result);
+      } else {
+        console.log(delta.result);
+      }
+    }
+    if (delta.type === "text-delta") {
+      process.stdout.write(delta.textDelta);
+    }
+  }
 };
