@@ -76,7 +76,8 @@ export const getCompanyInfo = async (company: string) => {
 };
 
 const main = async () => {
-  console.log("hello world");
+  const companyInfo = await getCompanyInfo("Apple");
+  console.log(companyInfo);
 };
 
 main();
