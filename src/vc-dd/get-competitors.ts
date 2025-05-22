@@ -1,5 +1,5 @@
 import { perplexity } from "@ai-sdk/perplexity";
-import { generateText, Output, tool } from "ai";
+import { generateText, Output, tool, generateObject } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { z } from "zod";
 import { exa } from "./shared";
@@ -58,5 +58,35 @@ const fetchCompetitorsFromWeb = async (company: string, n: number = 2) => {
     }),
   });
   console.log(`Successfully fetched company info for ${company}`);
+  return competitors;
+};
+
+export const getCompetitors = async (company: string, n: number = 2) => {
+  console.log(`Getting competitors for ${company}`);
+
+  const results = await Promise.all([
+    fetchCompetitorsPerplexity(company, n),
+    fetchCompetitorsFromWeb(company, n),
+  ]);
+
+  const { object: competitors } = await generateObject({
+    model: openai("gpt-4o-mini"),
+    prompt:
+      "Extract the competitors from the following text:\n\nRaw competitors:\n" +
+      JSON.stringify(results),
+    output: "array",
+    schema: z.object({
+      name: z.string(),
+      description: z.string(),
+      website: z.string().url(),
+      similarity: z.string(),
+      sources: z.array(z.string()),
+    }),
+  });
+
+  console.log(
+    `Competitors retrieved: ${competitors.map((competitor) => competitor.name).join(", ")}`,
+  );
+
   return competitors;
 };
