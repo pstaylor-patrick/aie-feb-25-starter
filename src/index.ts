@@ -6,8 +6,8 @@ import { z } from "zod";
 const main = async () => {
   const result = await generateText({
     model: openai("gpt-4o"),
-    prompt: "What's 10 + 5?",
-    maxSteps: 2,
+    prompt: "Get the weather in SF and NY, then add them together.",
+    maxSteps: 3,
     tools: {
       addNumbers: tool({
         description: "Add two numbers together",
@@ -19,9 +19,30 @@ const main = async () => {
           return num1 + num2;
         },
       }),
+      getWeather: tool({
+        description: "Get the current weather at a location",
+        parameters: z.object({
+          latitude: z.number(),
+          longitude: z.number(),
+          city: z.string(),
+        }),
+        execute: async ({ latitude, longitude, city }) => {
+          const response = await fetch(
+            `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weathercode,relativehumidity_2m&timezone=auto`,
+          );
+ 
+          const weatherData = await response.json();
+          return {
+            temperature: weatherData.current.temperature_2m,
+            weatherCode: weatherData.current.weathercode,
+            humidity: weatherData.current.relativehumidity_2m,
+            city,
+          };
+        },
+      }),
     },
   });
-  console.log(result.steps.length);
+  console.log(result.steps.length)
   console.log(result.text);
 };
  
