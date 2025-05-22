@@ -1,4 +1,7 @@
 import { exa } from "./shared";
+import { generateObject } from "ai";
+import { openai } from "@ai-sdk/openai";
+import { z } from "zod";
 
 const fetchCrunchbase = async (company: string) => {
   const result = await exa.searchAndContents(`${company} crunchbase page:`, {
@@ -46,4 +49,26 @@ const fetchFinancials = async (company: string) => {
     includeText: [company],
   });
   return result.results[0];
+};
+
+export const getCompanyFinancials = async (company: string) => {
+  const results = await Promise.all([
+    fetchCrunchbase(company),
+    fetchFinancials(company),
+    fetchPitchbook(company),
+    fetchFunding(company),
+  ]);
+
+  const { object } = await generateObject({
+    model: openai("gpt-4o"),
+    prompt:
+      "Summarize the financials, pitchbook, and funding information for the company.\n\n" +
+      JSON.stringify(results),
+    schema: z.object({
+      investors: z.array(z.string()),
+      currentValuation: z.number().nullable(),
+      totalRaised: z.number(),
+    }),
+  });
+  return object;
 };
