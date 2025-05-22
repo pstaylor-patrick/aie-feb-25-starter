@@ -18,9 +18,12 @@ const generateSearchQueries = async (query: string, n: number = 3) => {
   return queries;
 };
 
-const main = async () => {
-  const prompt = "What do you need to be a D1 shotput athlete?";
-  const queries = await generateSearchQueries(prompt);
+const deepResearch = async (
+  query: string,
+  depth: number = 1,
+  breadth: number = 3,
+) => {
+  const queries = await generateSearchQueries(query);
 
   for (const query of queries) {
     console.log(`Searching the web for: ${query}`);
@@ -28,8 +31,14 @@ const main = async () => {
     for (const searchResult of searchResults) {
       console.log(`Processing search result: ${searchResult.url}`);
       const learnings = await generateLearnings(query, searchResult);
+      // call deepResearch recursively with decrementing depth and breadth
     }
   }
+};
+
+const main = async () => {
+  const prompt = "What do you need to be a D1 shotput athlete?";
+  const research = await deepResearch(prompt);
 };
 
 main();
