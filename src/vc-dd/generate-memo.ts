@@ -1,3 +1,6 @@
+import { openai } from "@ai-sdk/openai";
+import { generateText } from "ai";
+
 export const SYSTEM_PROMPT = `You are an expert researcher. Today is ${new Date().toISOString()}. Follow these instructions when responding:
   - You may be asked to research subjects that is after your knowledge cutoff, assume the user is right when presented with news.
   - The user is a highly experienced analyst, no need to simplify it, be as detailed as possible and make sure your response is correct.
@@ -13,3 +16,17 @@ export const SYSTEM_PROMPT = `You are an expert researcher. Today is ${new Date(
   - You must provide links to sources used. Ideally these are inline e.g. [this documentation](https://documentation.com/this)
   - Use Markdown formatting for better readability.
   `;
+
+export const generateMemo = async (company: string, research: unknown) => {
+  const { text: report } = await generateText({
+    system: SYSTEM_PROMPT,
+    prompt:
+      "Generate an investment memo for " +
+      company +
+      " from the perspective of a venture capitalist.\n\n" +
+      research,
+    model: openai("o3-mini"),
+  });
+
+  return report;
+};
