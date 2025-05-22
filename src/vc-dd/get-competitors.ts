@@ -90,3 +90,10 @@ export const getCompetitors = async (company: string, n: number = 2) => {
 
   return competitors;
 };
+
+const main = async () => {
+  const competitors = await getCompetitors("Apple");
+  console.log(competitors);
+};
+
+main();
