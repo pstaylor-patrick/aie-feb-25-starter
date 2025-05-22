@@ -40,18 +40,27 @@ const generateSearchQueries = async (query: string, n: number = 3) => {
 };
 
 const deepResearch = async (
-  query: string,
-  depth: number = 1,
-  breadth: number = 3,
+  prompt: string,
+  depth: number = 2,
+  breadth: number = 2,
 ) => {
-  const queries = await generateSearchQueries(query);
+  if (!accumulatedResearch.query) {
+    accumulatedResearch.query = prompt;
+  }
+
+  const queries = await generateSearchQueries(prompt, breadth);
+  accumulatedResearch.queries = queries;
 
   for (const query of queries) {
     console.log(`Searching the web for: ${query}`);
     const searchResults = await searchAndProcess(query);
+    accumulatedResearch.searchResults.push(...searchResults);
     for (const searchResult of searchResults) {
       console.log(`Processing search result: ${searchResult.url}`);
       const learnings = await generateLearnings(query, searchResult);
+      accumulatedResearch.learnings.push(learnings);
+      accumulatedResearch.completedQueries.push(query);
+
       // call deepResearch recursively with decrementing depth and breadth
     }
   }
