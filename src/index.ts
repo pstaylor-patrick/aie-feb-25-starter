@@ -108,7 +108,10 @@ const searchWeb = async (query: string) => {
   );
 };
 
-const searchAndProcess = async (query: string) => {
+const searchAndProcess = async (
+  query: string,
+  accumulatedSources: SearchResult[],
+) => {
   const pendingSearchResults: SearchResult[] = [];
   const finalSearchResults: SearchResult[] = [];
   await generateText({
@@ -137,11 +140,16 @@ const searchAndProcess = async (query: string) => {
           const { object: evaluation } = await generateObject({
             model: mainModel,
             prompt: `Evaluate whether the search results are relevant and will help answer the following query: ${query}. If the page already exists in the existing results, mark it as irrelevant.
-
-                <search_results>
-                ${JSON.stringify(pendingResult)}
-                </search_results>
-                `,
+   
+              <search_results>
+              ${JSON.stringify(pendingResult)}
+              </search_results>
+   
+              <existing_results>
+              ${JSON.stringify(accumulatedSources.map((result) => result.url))}
+              </existing_results>
+   
+              `,
             output: "enum",
             enum: ["relevant", "irrelevant"],
           });
