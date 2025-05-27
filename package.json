@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx src/index.ts"
+    "dev:deep-research": "tsx src/deep-research/index.ts",
+    "dev:vc-dd": "tsx src/vc-dd/index.ts"
   },
   "keywords": [],
   "author": "",
